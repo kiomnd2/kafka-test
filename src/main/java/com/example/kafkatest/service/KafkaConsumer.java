@@ -14,8 +14,6 @@ import java.util.concurrent.CountDownLatch;
 @Component
 public class KafkaConsumer {
 
-    @Value("${kafka.consume.topic}")
-    private String topic;
 
     private CountDownLatch latch = new CountDownLatch(1);
 
