@@ -1,9 +1,8 @@
 package com.example.kafkatest;
 
-import com.example.kafkatest.model.TestModel;
-import com.example.kafkatest.service.KafkaConsumer;
+import com.example.kafkatest.model.TestResponse;
+import com.example.kafkatest.listener.KafkaConsumer;
 import com.example.kafkatest.service.KafkaProducer;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,7 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.test.annotation.DirtiesContext;
 
-import java.util.concurrent.TimeUnit;
+import java.time.LocalDateTime;
 
 
 @SpringBootTest
@@ -29,13 +28,10 @@ public class KafkaTest {
     private String topic;
 
     @Test
-    void testKafka() throws Exception{
-        TestModel testModel = new TestModel("123 ","1234");
+    void testKafkaProduceTest() throws Exception{
+        TestResponse testModel = new TestResponse("123 ","1234", LocalDateTime.now(), null, null);
 
         producer.sendMessage(testModel);
 
-        boolean await = consumer.getLatch().await(10, TimeUnit.SECONDS);
-
-        Assertions.assertThat(await).isTrue();
     }
 }

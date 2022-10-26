@@ -1,6 +1,7 @@
 package com.example.kafkatest.config;
 
 import com.example.kafkatest.model.TestModel;
+import com.example.kafkatest.model.TestResponse;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,7 +22,7 @@ public class KafkaProduceConfig {
     private String bootstrapServer;
 
     @Bean
-    public ProducerFactory<String, TestModel> produceConfig() {
+    public ProducerFactory<String, TestResponse> produceConfig() {
         Map<String, Object> props = new HashMap<>();
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,bootstrapServer);
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
@@ -30,7 +31,7 @@ public class KafkaProduceConfig {
     }
 
     @Bean
-    public KafkaTemplate<String, TestModel> kafkaTemplate() {
+    public KafkaTemplate<String, TestResponse> kafkaTemplate() {
         return new KafkaTemplate<>(produceConfig());
     }
 

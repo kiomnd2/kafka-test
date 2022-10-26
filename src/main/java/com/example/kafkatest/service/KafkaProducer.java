@@ -1,6 +1,7 @@
 package com.example.kafkatest.service;
 
 import com.example.kafkatest.model.TestModel;
+import com.example.kafkatest.model.TestResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -17,23 +18,23 @@ import org.springframework.util.concurrent.ListenableFutureCallback;
 @Component
 public class KafkaProducer {
 
-    private final KafkaTemplate<String, TestModel> kafkaTemplate;
+    private final KafkaTemplate<String, TestResponse> kafkaTemplate;
 
-    @Value("${kafka.consume.topic}")
+    @Value("${kafka.produce.topic}")
     private String topic;
 
-    public void sendMessage(TestModel message) {
-        ListenableFuture<SendResult<String, TestModel>> send = kafkaTemplate.send(topic, message);
+    public void sendMessage(TestResponse message) throws Exception {
+        ListenableFuture<SendResult<String, TestResponse>> send = kafkaTemplate.send(topic, message);
 
-        send.addCallback(new ListenableFutureCallback<SendResult<String, TestModel>>() {
+        send.addCallback(new ListenableFutureCallback<SendResult<String, TestResponse>>() {
             @Override
             public void onFailure(Throwable ex) {
                 log.error(ex.getMessage());
             }
 
             @Override
-            public void onSuccess(SendResult<String, TestModel> result) {
-                ProducerRecord<String, TestModel> producerRecord = result.getProducerRecord();
+            public void onSuccess(SendResult<String, TestResponse> result) {
+                ProducerRecord<String, TestResponse> producerRecord = result.getProducerRecord();
                 System.out.println("producerRecord = " + producerRecord.toString());
             }
         });
